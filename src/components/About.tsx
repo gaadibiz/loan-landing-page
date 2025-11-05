@@ -7,7 +7,6 @@ export default function LoanLanding() {
   return (
     <div className="bg-white text-gray-900">
 
-
       {/* Section 1: Why Choose LoanInNeed */}
       <section className="bg-gray-50 py-16 px-6 md:px-20 text-center"> 
   <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose LoanInNeed?</h2>
@@ -152,21 +151,20 @@ export default function LoanLanding() {
       </thead>
       <tbody>
         <tr className="text-gray-800">
-          <td className="border border-gray-300 px-4 py-3 font-bold">1000</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">375%</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">6 Months</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">70</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">13</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">917</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">479</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">2875</td>
-          <td className="border border-gray-300 px-4 py-3 font-bold">1875</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.1000</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">375%</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">6 Months</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.70</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.13</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.917</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.479</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.2875</td>
+          <td className="border border-gray-300 px-4 py-3 font-semibold">Rs.1875</td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-
 
     </div>
   );
