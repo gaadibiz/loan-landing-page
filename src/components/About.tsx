@@ -6,6 +6,8 @@ import { Clock, IndianRupee, ShieldCheck } from "lucide-react";
 export default function LoanLanding() {
   return (
     <div className="bg-white text-gray-900">
+
+
       {/* Section 1: Why Choose LoanInNeed */}
       <section className="bg-gray-50 py-16 px-6 md:px-20 text-center"> 
   <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose LoanInNeed?</h2>
@@ -116,6 +118,56 @@ export default function LoanLanding() {
           </div>
         </div>
       </section>
+
+    {/* Section 4: Disclaimer */}
+<section className="bg-white py-16 px-6 md:px-20 text-center">
+  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
+    Disclaimers
+  </h2>
+
+  {/* Bullet Points */}
+  <div className="max-w-3xl mx-auto text-left space-y-2 text-lg">
+    <ul className="list-disc pl-6 space-y-1">
+      <li>Loan repayment term :- 61 - 180 Days.</li>
+      <li>Maximum Annual Percentage Rate (APR) 375%</li>
+      <li>Representative Example:</li>
+    </ul>
+  </div>
+
+  {/* Table Section */}
+  <div className="overflow-x-auto mt-8">
+    <table className="w-full max-w-4xl mx-auto border border-gray-300 text-center">
+      <thead className="bg-gray-100 text-gray-900">
+        <tr>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Loan Amount</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">APR</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Tenure</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Processing Fee</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">GST on Processing Fee</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Amount Disbursed</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">EMI</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Total Repayment Amount</th>
+          <th className="border border-gray-300 px-4 py-3 font-semibold">Total Interest</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="text-gray-800">
+          <td className="border border-gray-300 px-4 py-3 font-bold">1000</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">375%</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">6 Months</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">70</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">13</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">917</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">479</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">2875</td>
+          <td className="border border-gray-300 px-4 py-3 font-bold">1875</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
     </div>
   );
 }
