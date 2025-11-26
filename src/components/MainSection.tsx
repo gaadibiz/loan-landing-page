@@ -19,7 +19,7 @@ import { useSearchParams } from "next/navigation";
 
 
 export default function MainSection() {
-  
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ export default function MainSection() {
 
 
 
-useEffect(() => {
+  useEffect(() => {
     const gclid = searchParams.get("gclid");
     if (gclid) {
       setFormData((prev) => ({ ...prev, gclid })); // add gclid to formData
@@ -58,7 +58,7 @@ useEffect(() => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate required fields
     if (!formData.name || !formData.phone || !formData.salary || !formData.city || !formData.loanAmount) {
       toast.error("❌ Please fill in all required fields.");
@@ -70,10 +70,10 @@ useEffect(() => {
       return;
     }
 
-    if (Number(formData.salary) < 35000) {
-      toast.error("❌ Minimum salary should be ₹35,000.");
-      return;
-    }
+    // if (Number(formData.salary) < 35000) {
+    //   toast.error("❌ Minimum salary should be ₹35,000.");
+    //   return;
+    // }
 
     setShowModal(true);
   };
@@ -83,11 +83,40 @@ useEffect(() => {
       toast.error("❌ You must agree to the terms before proceeding.");
       return;
     }
-    
+
     setLoading(true);
 
     try {
+      // First API call - existing functionality
       const res = await axios.post("/api/users", formData);
+
+      // Second API call - upsert lead to external service
+      try {
+        const leadPayload = {
+          name: formData.name || null,
+          contact_number_one: formData.phone || null,
+          email: null,
+          followup_date: null,
+          extras: {
+            loan_amount: formData.loanAmount || "",
+            cibil: formData.cibil || "",
+            monthly_salary: formData.salary || "",
+            city: formData.city || "",
+            gclid: formData.gclid || "",
+          },
+          status: null,
+          drive_status_uuid: null
+        };
+
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/leads/upsert-leads`,
+          leadPayload
+        );
+        console.log("✅ Lead upserted successfully to external service");
+      } catch (leadError) {
+        // Log error but don't block the main flow
+        console.error("⚠ Failed to upsert lead to external service:", leadError);
+      }
 
       if (res.status === 201) {
         toast.success("✅ Loan application submitted successfully!");
@@ -163,7 +192,7 @@ useEffect(() => {
               className="text-lg border border-white px-6 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-colors text-center flex items-center justify-center gap-2"
             >
               <strong><Phone className="w-8 h-5 font-bold text-xl" /></strong>
-              Call: 
+              Call:
               <span>9266328731</span>
             </a>
           </div>
@@ -236,7 +265,7 @@ useEffect(() => {
               </div>
             </div>
 
-             {/* City */}
+            {/* City */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 City <span className="text-red-500">*</span>
@@ -270,56 +299,10 @@ useEffect(() => {
             </div>
 
 
-           {/* Salary */}
-<div className="mb-1.5">
-  <label className="block text-sm font-medium mb-1">
-    Monthly Salary (₹) <span className="text-red-500">*</span>
-  </label>
-
-  {/* Minimum Salary Note */}
-  <p className="text-xs text-gray-500 mb-1">
-    Minimum required salary:{" "}
-    {["Mumbai", "Delhi/NCR", "Bangalore", "Hyderabad", "Chennai"].includes(formData.city)
-      ? "₹51,000"
-      : "₹35,000"}
-  </p>
-
-  <div className="relative">
-    <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-    <select
-      name="salary"
-      className="w-full border border-gray-400 rounded-lg p-3 pl-10 outline-none
-        focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
-      value={formData.salary}
-      onChange={handleChange}
-      required
-      data-form-type="salary"
-    >
-      <option value="">Select salary range</option>
-
-      {["Mumbai", "Delhi/NCR", "Bangalore", "Hyderabad", "Chennai"].includes(formData.city) ? (
-        <>
-          <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
-          <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
-          <option value="1,00,000+">₹1,00,000 and above</option>
-        </>
-      ) : (
-        <>
-          <option value="35,000 - 50,000">₹35,000 - ₹50,000</option>
-          <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
-          <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
-          <option value="1,00,000+">₹1,00,000 and above</option>
-        </>
-      )}
-    </select>
-  </div>
-</div>
-
-
             {/* Loan Amount */}
             <div>
               <label className="block text-sm font-medium mb-1">
-                Loan Amount <span className="text-red-500">*</span>
+                Loan Amount Required <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
@@ -344,6 +327,82 @@ useEffect(() => {
                   <option value="₹75,000">₹75,000</option>
                   <option value="₹1,00,000">₹1,00,000</option>
                 </select>
+              </div>
+            </div>
+
+
+            {/* Salary */}
+            <div className="mb-1.5">
+              <label className="block text-sm font-medium mb-1">
+                Monthly Salary (₹) <span className="text-red-500">*</span>
+              </label>
+
+              {/* Minimum Salary Note */}
+              {/* <p className="text-xs text-gray-500 mb-1">
+    Minimum required salary:{" "}
+    {["Mumbai", "Delhi/NCR", "Bangalore", "Hyderabad", "Chennai"].includes(formData.city)
+      ? "₹51,000"
+      : "₹35,000"}
+  </p> */}
+
+              {/* <div className="relative">
+                <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                <select
+                  name="salary"
+                  className="w-full border border-gray-400 rounded-lg p-3 pl-10 outline-none
+        focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
+                  value={formData.salary}
+                  onChange={handleChange}
+                  required
+                  data-form-type="salary"
+                >
+                  <option value="">Select salary range</option>
+
+                  {["Mumbai", "Delhi/NCR", "Bangalore", "Hyderabad", "Chennai"].includes(formData.city) ? (
+                    <>
+                      <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
+                      <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
+                      <option value="1,00,000+">₹1,00,000 and above</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="35,000 - 50,000">₹35,000 - ₹50,000</option>
+                      <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
+                      <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
+                      <option value="1,00,000+">₹1,00,000 and above</option>
+                    </>
+                  )}
+                </select>
+              </div> */}
+
+
+              <div className="relative">
+                <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+
+                <input
+                  type="text"
+                  name="salary"
+                  className="w-full border border-gray-400 rounded-lg p-3 pl-10 outline-none
+    focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
+                  placeholder="Enter your monthly salary (₹)"
+                  value={
+                    formData.salary
+                      ? Number(formData.salary).toLocaleString("en-IN")
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/,/g, "");
+
+                    if (!isNaN(Number(raw))) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        salary: raw,
+                      }));
+                    }
+                  }}
+                  required
+                  data-form-type="salary"
+                />
               </div>
             </div>
 
@@ -377,19 +436,18 @@ useEffect(() => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-red-600 text-white hover:bg-red-700"
-              }`}
+              className={`w-full py-3 rounded-lg font-semibold transition-colors ${loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-red-600 text-white hover:bg-red-700"
+                }`}
             >
               {loading ? "Please Wait..." : "Get Instant Approval"}
             </button>
 
             <p className="text-xs text-gray-500 text-center mt-2">
               By proceeding, you agree to our{" "}
-                <a
-                  href="/terms-and-conditions"
+              <a
+                href="/terms-and-conditions"
                 type="button"
                 className="text-red-600 hover:text-red-700 hover:underline"
               >
@@ -397,7 +455,7 @@ useEffect(() => {
               </a>{" "}
               and{" "}
               <a
-                  href="/privacy-policy"
+                href="/privacy-policy"
                 type="button"
                 className="text-red-600 hover:text-red-700 hover:underline">
                 Privacy Policy
@@ -413,19 +471,19 @@ useEffect(() => {
                 <p className="text-gray-600 mb-4 text-sm text-center">
                   By proceeding, you agree to our{" "}
                   <a
-                  href="/terms-and-conditions"
-                type="button"
-                className="text-red-600 hover:text-red-700 hover:underline"
-              >
-                Terms & Conditions
-              </a>{" "}
-              and{" "}
-              <a
-                  href="/privacy-policy"
-                type="button"
-                className="text-red-600 hover:text-red-700 hover:underline">
-                Privacy Policy
-              </a>.
+                    href="/terms-and-conditions"
+                    type="button"
+                    className="text-red-600 hover:text-red-700 hover:underline"
+                  >
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="/privacy-policy"
+                    type="button"
+                    className="text-red-600 hover:text-red-700 hover:underline">
+                    Privacy Policy
+                  </a>.
                 </p>
                 <div className="flex items-center mb-4">
                   <input
@@ -449,11 +507,10 @@ useEffect(() => {
                   <button
                     onClick={handleFinalSubmit}
                     disabled={!agree || loading}
-                    className={`px-4 py-2 rounded text-white transition-colors ${
-                      loading || !agree
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-red-600 hover:bg-red-700"
-                    }`}
+                    className={`px-4 py-2 rounded text-white transition-colors ${loading || !agree
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-red-600 hover:bg-red-700"
+                      }`}
                   >
                     {loading ? "Submitting..." : "Proceed"}
                   </button>
@@ -475,9 +532,9 @@ useEffect(() => {
       </div>
 
       {/* Toast Container */}
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
