@@ -1,8 +1,8 @@
 // app/api/users/route.ts
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import { google } from "googleapis";
+import { connectDB } from "@/lib/db";
 
 // Save data to Google Sheets
 async function saveToGoogleSheet(data: {
@@ -26,7 +26,7 @@ async function saveToGoogleSheet(data: {
   
 const getResponse = await sheets.spreadsheets.values.get({
   spreadsheetId,
-  range: "'Google Leads November'!D2:K50000",
+  range: "'Google Leads December'!D2:K50000",
 });
 
 const rows = getResponse.data.values || [];
@@ -40,7 +40,7 @@ for (let i = rows.length - 1; i >= 0; i--) {
 }
 
 const nextRow = lastRow + 1;
-const range = `'Google Leads November'!D${nextRow}:K${nextRow}`;
+const range = `'Google Leads December'!D${nextRow}:K${nextRow}`;
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
@@ -94,12 +94,12 @@ export async function POST(req: Request) {
 
     // Save to Google Sheets (non-blocking)
     await saveToGoogleSheet({
-      name: savedUser.name,
-      phone: savedUser.phone,
-      city: savedUser.city,
-      loanAmount: savedUser.loanAmount,
-      cibil: savedUser.cibil,
-      salary: savedUser.salary,
+      name: body.name,
+      phone: body.phone,
+      city: body.city,
+      loanAmount: body.loanAmount,
+      cibil: body.cibil,
+      salary: body.salary,
       gclid: body.gclid,
     });
 
