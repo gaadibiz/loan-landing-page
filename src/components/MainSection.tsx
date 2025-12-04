@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import kylasMapping from "@/data/kylasMapping.json";
 
 
 export default function MainSection() {
@@ -105,8 +106,7 @@ export default function MainSection() {
             gclid: formData.gclid || "",
           },
           status: null,
-          drive_status_uuid: null,
-          source: `${process.env.NEXT_PUBLIC_SOURCE_URL}`
+          drive_status_uuid: null
         };
 
         await axios.post(
@@ -117,6 +117,86 @@ export default function MainSection() {
       } catch (leadError) {
         // Log error but don't block the main flow
         console.error("⚠ Failed to upsert lead to external service:", leadError);
+      }
+
+      // Third API call - Kylas Lead API
+      try {
+        // Get mapped values from the JSON file
+        const cityMappedId = formData.city
+          ? kylasMapping.cityMapping[formData.city as keyof typeof kylasMapping.cityMapping] || null
+          : null;
+        const loanAmountMappedId = formData.loanAmount
+          ? kylasMapping.loanAmountMapping[formData.loanAmount as keyof typeof kylasMapping.loanAmountMapping] || null
+          : null;
+        const cibilMappedId = formData.cibil
+          ? kylasMapping.cibilScoreMapping[formData.cibil as keyof typeof kylasMapping.cibilScoreMapping] || null
+          : null;
+
+        const kylasPayload = {
+          firstName: formData.name?.split(" ")[0] || "",
+          lastName: formData.name?.split(" ").slice(1).join(" ") || "",
+          phoneNumbers: [
+            {
+              type: "MOBILE",
+              code: "IN",
+              value: formData.phone || "",
+              dialCode: "+91",
+              primary: true
+            }
+          ],
+          salutation: null,
+          emails: [],
+          timezone: "Asia/Kolkata",
+          city: formData.city || "",
+          state: "",
+          zipcode: "",
+          country: "IN",
+          department: "",
+          dnd: false,
+          facebook: "",
+          twitter: "",
+          linkedIn: "",
+          address: "",
+          companyName: "",
+          designation: "",
+          companyAddress: "",
+          companyCity: "",
+          companyState: "",
+          companyZipcode: "",
+          companyCountry: "IN",
+          companyEmployees: cityMappedId,
+          companyAnnualRevenue: null,
+          companyWebsite: "",
+          companyPhones: [],
+          companyIndustry: "",
+          companyBusinessType: "",
+          requirementName: `Loan Amount: ${formData.loanAmount || ""}`,
+          requirementCurrency: "INR",
+          requirementBudget: formData.loanAmount ? parseInt(formData.loanAmount.replace(/[₹,]/g, "")) : null,
+          products: [],
+          campaign: null,
+          source: null,
+          customFieldValues: {
+            cfLoanAmount: Number(loanAmountMappedId) || null,
+            cfCibilScoreRange: Number(cibilMappedId) || null,
+            cfMonthlySalary: Number(formData.salary) || null,
+          }
+        };
+
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_KYLAS_API}/v1/leads/`,
+          kylasPayload,
+          {
+            headers: {
+              "api-key": process.env.NEXT_PUBLIC_LEAD_API_KEY,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        console.log("✅ Lead submitted successfully to Kylas");
+      } catch (kylasError) {
+        // Log error but don't block the main flow
+        console.error("⚠ Failed to submit lead to Kylas:", kylasError);
       }
 
       if (res.status === 201) {
