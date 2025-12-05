@@ -176,12 +176,13 @@ export default function MainSection() {
           requirementBudget: formData.loanAmount ? parseInt(formData.loanAmount.replace(/[₹,]/g, "")) : null,
           products: [],
           campaign: null,
-          source: null,
           customFieldValues: {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
             cfMonthlySalary: Number(formData.salary) || null,
-          }
+          },
+          source: 2650535,
+          subSource: "Google Ads Lead"
         };
 
         await axios.post(
