@@ -106,7 +106,8 @@ export default function MainSection() {
             gclid: formData.gclid || "",
           },
           status: null,
-          drive_status_uuid: null
+          drive_status_uuid: null,
+          source: `${process.env.NEXT_PUBLIC_SOURCE_URL}`
         };
 
         await axios.post(
