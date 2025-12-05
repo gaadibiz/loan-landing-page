@@ -175,7 +175,7 @@ export default function MainSection() {
           requirementCurrency: "INR",
           requirementBudget: formData.loanAmount ? parseInt(formData.loanAmount.replace(/[₹,]/g, "")) : null,
           products: [],
-          campaign: null,
+          campaign: 2688093,
           customFieldValues: {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
