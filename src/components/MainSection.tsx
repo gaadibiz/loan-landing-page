@@ -30,17 +30,42 @@ export default function MainSection() {
     city: "",
     loanAmount: "",
     cibil: "",
-    gclid: ""
+    gclid: "",
+    utmSource: "",
+    utmMedium: "",
+    utmCampaign: "",
+    utmContent: "",
+    utmTerm: ""
   });
 
 
 
   useEffect(() => {
     const gclid = searchParams.get("gclid");
-    if (gclid) {
-      setFormData((prev) => ({ ...prev, gclid })); // add gclid to formData
-      console.log("Captured gclid:", gclid);
-    }
+    const utmSource = searchParams.get("utm_source");
+    const utmMedium = searchParams.get("utm_medium");
+    const utmCampaign = searchParams.get("utm_campaign");
+    const utmContent = searchParams.get("utm_content");
+    const utmTerm = searchParams.get("utm_term");
+
+    setFormData((prev) => ({
+      ...prev,
+      gclid: gclid || "",
+      utmSource: utmSource || "",
+      utmMedium: utmMedium || "",
+      utmCampaign: utmCampaign || "",
+      utmContent: utmContent || "",
+      utmTerm: utmTerm || ""
+    }));
+
+    console.log("Captured URL parameters:", {
+      gclid,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmContent,
+      utmTerm
+    });
   }, [searchParams]);
 
   const [loading, setLoading] = useState(false);
@@ -91,36 +116,7 @@ export default function MainSection() {
       // First API call - existing functionality
       const res = await axios.post("/api/users", formData);
 
-      // Second API call - upsert lead to external service
-      try {
-        const leadPayload = {
-          name: formData.name || null,
-          contact_number_one: formData.phone || null,
-          email: null,
-          followup_date: null,
-          extras: {
-            loan_amount: formData.loanAmount || "",
-            cibil: formData.cibil || "",
-            monthly_salary: formData.salary || "",
-            city: formData.city || "",
-            gclid: formData.gclid || "",
-          },
-          status: null,
-          drive_status_uuid: null,
-          source: `${process.env.NEXT_PUBLIC_SOURCE_URL}`
-        };
-
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/leads/upsert-leads`,
-          leadPayload
-        );
-        console.log("✅ Lead upserted successfully to external service");
-      } catch (leadError) {
-        // Log error but don't block the main flow
-        console.error("⚠ Failed to upsert lead to external service:", leadError);
-      }
-
-      // Third API call - Kylas Lead API
+      // Second API call - Kylas Lead API
       try {
         // Get mapped values from the JSON file
         const cityMappedId = formData.city
@@ -182,7 +178,12 @@ export default function MainSection() {
             cfMonthlySalary: Number(formData.salary) || null,
           },
           source: 2650535,
-          subSource: "Google Ads Lead"
+          subSource: "Google Ads Lead",
+          utmSource: formData.utmSource || null,
+          utmCampaign: formData.utmCampaign || null,
+          utmMedium: formData.utmMedium || null,
+          utmContent: formData.utmContent || null,
+          utmTerm: formData.utmTerm || null
         };
 
         await axios.post(
@@ -210,7 +211,12 @@ export default function MainSection() {
           city: "",
           loanAmount: "",
           cibil: "",
-          gclid: ""
+          gclid: "",
+          utmSource: "",
+          utmMedium: "",
+          utmCampaign: "",
+          utmContent: "",
+          utmTerm: ""
         });
         setTimeout(() => {
           router.push("/thank-you");
