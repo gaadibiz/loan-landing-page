@@ -179,6 +179,7 @@ export default function MainSection() {
           },
           source: 2650535,
           subSource: "Google Ads Lead",
+          gclid: formData.gclid || null,
           utmSource: formData.utmSource || null,
           utmCampaign: formData.utmCampaign || null,
           utmMedium: formData.utmMedium || null,
