@@ -71,6 +71,8 @@ export default function MainSection() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [checkbox1, setCheckbox1] = useState(true);
+  const [checkbox2, setCheckbox2] = useState(true);
 
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -154,7 +156,7 @@ export default function MainSection() {
           twitter: "",
           linkedIn: "",
           address: "",
-          companyName: "",
+          companyName: `${checkbox1} ${checkbox2}`,
           designation: "",
           companyAddress: "",
           companyCity: "",
@@ -522,11 +524,39 @@ export default function MainSection() {
               </div>
             </div>
 
+            {/* Checkboxes */}
+            <div className="space-y-3 mt-4">
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="terms-checkbox"
+                  checked={checkbox1}
+                  onChange={() => setCheckbox1(!checkbox1)}
+                  className="w-4 h-4 mt-1 text-red-600 border-gray-300 rounded focus:ring-red-500 cursor-pointer flex-shrink-0"
+                />
+                <label htmlFor="terms-checkbox" className="text-xs text-gray-700 cursor-pointer">
+                  I acknowledge that I have carefully read and understood the Product Terms and Conditions, including loan terms, charges, and disclosures, and hereby expressly consent to and agree to be legally bound by the same in accordance with applicable RBI regulations.
+                </label>
+              </div>
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="communication-checkbox"
+                  checked={checkbox2}
+                  onChange={() => setCheckbox2(!checkbox2)}
+                  className="w-4 h-4 mt-1 text-red-600 border-gray-300 rounded focus:ring-red-500 cursor-pointer flex-shrink-0"
+                />
+                <label htmlFor="communication-checkbox" className="text-xs text-gray-700 cursor-pointer">
+                  I expressly consent to receive transactional and service-related communications through electronic modes, including WhatsApp, SMS, and email, in accordance with applicable laws and regulations.
+                </label>
+              </div>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 rounded-lg font-semibold transition-colors ${loading
+              className={`w-full py-3 rounded-lg font-semibold transition-colors mt-4 ${loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-red-600 text-white hover:bg-red-700"
                 }`}
