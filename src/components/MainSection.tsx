@@ -178,10 +178,10 @@ export default function MainSection() {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
             cfMonthlySalary: Number(formData.salary) || null,
+            cfGclId: formData.gclid || ""
           },
           source: 2650535,
           subSource: "Google Ads Lead",
-          gclid: formData.gclid || null,
           utmSource: formData.utmSource || null,
           utmCampaign: formData.utmCampaign || null,
           utmMedium: formData.utmMedium || null,
