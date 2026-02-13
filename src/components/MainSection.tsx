@@ -336,14 +336,17 @@ export default function MainSection() {
                 Phone Number <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-2/5 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Phone className="absolute left-3 top-1/3 -translate-y-1/3 text-gray-400 w-5 h-5 pointer-events-none" />
+                <span className="absolute left-10 top-1/3 -translate-y-1/3 text-gray-500 font-medium pointer-events-none">
+                  +91
+                </span>
                 <input
                   type="tel"
                   name="phone"
                   pattern="[0-9]{10}"
                   maxLength={10}
                   placeholder="10-digit mobile number"
-                  className="w-full border border-gray-400 rounded-lg p-3 pl-10 outline-none 
+                  className="w-full border border-gray-400 rounded-lg p-3 pl-20 outline-none 
            focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
                   value={formData.phone}
                   onChange={handleChange}
