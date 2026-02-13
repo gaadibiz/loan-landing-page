@@ -116,7 +116,7 @@ export default function MainSection() {
 
     try {
       // First API call - existing functionality
-      const res = await axios.post("/api/users", formData);
+      const res = await axios.post("/api/users", { ...formData, phone: `+91${formData.phone}` });
 
       // Second API call - Kylas Lead API
       try {
