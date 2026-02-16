@@ -88,7 +88,7 @@ export default function MainSection() {
     e.preventDefault();
 
     // Validate required fields
-    if (!formData.name || !formData.phone || !formData.salary || !formData.city || !formData.loanAmount) {
+    if (!formData.name || !formData.phone || !formData.salary || !formData.city || !formData.loanAmount || !formData.cibil) {
       toast.error("❌ Please fill in all required fields.");
       return;
     }
@@ -177,7 +177,7 @@ export default function MainSection() {
           customFieldValues: {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
-            cfMonthlySalary: Number(formData.salary) || null,
+            cfMonthlySalary: formData.salary,
             cfGclId: formData.gclid || ""
           },
           source: 2650535,
@@ -440,7 +440,7 @@ export default function MainSection() {
       : "₹35,000"}
   </p> */}
 
-              {/* <div className="relative">
+              <div className="relative">
                 <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                 <select
                   name="salary"
@@ -452,26 +452,16 @@ export default function MainSection() {
                   data-form-type="salary"
                 >
                   <option value="">Select salary range</option>
-
-                  {["Mumbai", "Delhi/NCR", "Bangalore", "Hyderabad", "Chennai"].includes(formData.city) ? (
-                    <>
-                      <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
-                      <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
-                      <option value="1,00,000+">₹1,00,000 and above</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="35,000 - 50,000">₹35,000 - ₹50,000</option>
-                      <option value="51,000 - 75,000">₹51,000 - ₹75,000</option>
-                      <option value="76,000 - 1,00,000">₹76,000 - ₹1,00,000</option>
-                      <option value="1,00,000+">₹1,00,000 and above</option>
-                    </>
-                  )}
+                  <option value="Less than ₹20,000">Less than ₹20,000</option>
+                  <option value="₹20,000 - ₹35,000">₹20,000 - ₹35,000</option>
+                  <option value="₹35,000 - ₹50,000">₹35,000 - ₹50,000</option>
+                  <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
+                  <option value="₹1,00,000+">₹1,00,000 and above</option>
                 </select>
-              </div> */}
+              </div>
 
 
-              <div className="relative">
+              {/* <div className="relative">
                 <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
 
                 <input
@@ -498,13 +488,13 @@ export default function MainSection() {
                   required
                   data-form-type="salary"
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* CIBIL */}
             <div>
               <label className="block text-sm font-medium mb-1">
-                CIBIL Score <span className="text-gray-400">(Optional)</span>
+                CIBIL Score <span className="text-red-500">*</span>
               </label>
               <div className="relative">
                 <BarChart className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
@@ -514,6 +504,7 @@ export default function MainSection() {
            focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
                   value={formData.cibil}
                   onChange={handleChange}
+                  required
                   data-form-type="cibil"
                 >
                   <option value="">Select CIBIL Score range</option>
