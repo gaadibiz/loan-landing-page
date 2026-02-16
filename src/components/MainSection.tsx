@@ -130,6 +130,9 @@ export default function MainSection() {
         const cibilMappedId = formData.cibil
           ? kylasMapping.cibilScoreMapping[formData.cibil as keyof typeof kylasMapping.cibilScoreMapping] || null
           : null;
+        const salaryMappedId = formData.salary
+          ? kylasMapping.monthlySalaryMapping[formData.salary as keyof typeof kylasMapping.monthlySalaryMapping] || null
+          : null;
 
         const kylasPayload = {
           firstName: formData.name?.split(" ")[0] || "",
@@ -177,7 +180,7 @@ export default function MainSection() {
           customFieldValues: {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
-            cfMonthlySalary: formData.salary,
+            cfMonthlySalary: Number(salaryMappedId) || null,
             cfGclId: formData.gclid || ""
           },
           source: 2650535,
