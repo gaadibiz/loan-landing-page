@@ -180,7 +180,7 @@ export default function MainSection() {
           customFieldValues: {
             cfLoanAmount: Number(loanAmountMappedId) || null,
             cfCibilScoreRange: Number(cibilMappedId) || null,
-            cfMonthlySalary: Number(salaryMappedId) || null,
+            cfSalary: Number(salaryMappedId) || null,
             cfGclId: formData.gclid || ""
           },
           source: 2650535,
