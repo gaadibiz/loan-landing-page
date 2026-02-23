@@ -431,9 +431,12 @@ export default function MainSection() {
 
             {/* Salary */}
             <div className="mb-1.5">
-              <label className="block text-sm font-medium mb-1">
-                Monthly Salary (₹) <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-sm font-medium">
+                  Monthly Salary (₹) <span className="text-red-500">*</span>
+                </label>
+                <span className="text-xs text-red-500 italic font-medium">Minimum Salary Rs.35,000/-</span>
+              </div>
 
               {/* Minimum Salary Note */}
               {/* <p className="text-xs text-gray-500 mb-1">
@@ -455,8 +458,6 @@ export default function MainSection() {
                   data-form-type="salary"
                 >
                   <option value="">Select salary range</option>
-                  <option value="Less than ₹20,000">Less than ₹20,000</option>
-                  <option value="₹20,000 - ₹35,000">₹20,000 - ₹35,000</option>
                   <option value="₹35,000 - ₹50,000">₹35,000 - ₹50,000</option>
                   <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
                   <option value="₹1,00,000+">₹1,00,000 and above</option>
@@ -496,9 +497,12 @@ export default function MainSection() {
 
             {/* CIBIL */}
             <div>
-              <label className="block text-sm font-medium mb-1">
-                CIBIL Score <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1 mt-4">
+                <label className="text-sm font-medium">
+                  CIBIL Score <span className="text-red-500">*</span>
+                </label>
+                <span className="text-xs text-red-500 italic font-medium">Minimum CIBIL Score 650</span>
+              </div>
               <div className="relative">
                 <BarChart className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                 <select
@@ -514,9 +518,6 @@ export default function MainSection() {
                   <option value="750+ (Excellent)">750+ (Excellent)</option>
                   <option value="700-749 (Good)">700-749 (Good)</option>
                   <option value="650-699 (Fair)">650-699 (Fair)</option>
-                  <option value="600-649 (Poor)">600-649 (Poor)</option>
-                  <option value="Below 600">Below 600</option>
-                  <option value="Not Sure">Not Sure</option>
                 </select>
               </div>
             </div>
