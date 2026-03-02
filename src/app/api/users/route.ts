@@ -5,6 +5,66 @@ import { google } from "googleapis";
 import { connectDB } from "@/lib/db";
 
 // Save data to Google Sheets
+// async function saveToGoogleSheet(data: {
+//   name: string;
+//   phone: string;
+//   city: string;
+//   loanAmount: string;
+//   cibil?: string;
+//   salary: string;
+//   gclid?: string;
+// }) {
+//   const auth = new google.auth.JWT({
+//     email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+//     key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+//     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+//   });
+
+//   const sheets = google.sheets({ version: "v4", auth });
+//   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID!;
+
+
+//   const getResponse = await sheets.spreadsheets.values.get({
+//     spreadsheetId,
+//     range: "'Google Leads March'!A2:I50000",
+//   });
+
+//   const rows = getResponse.data.values || [];
+
+//   let lastRow = 1;
+//   for (let i = rows.length - 1; i >= 0; i--) {
+//     if (rows[i].some(cell => cell !== "")) {
+//       lastRow = 2 + i;
+//       break;
+//     }
+//   }
+
+//   const nextRow = lastRow + 1;
+//   const range = `'Google Leads March'!A${nextRow}:I${nextRow}`;
+
+//   await sheets.spreadsheets.values.append({
+//     spreadsheetId,
+//     range,
+//     valueInputOption: "USER_ENTERED",
+//     requestBody: {
+//       values: [
+//         [
+//           "", // UTM
+//           data.name,
+//           data.phone,
+//           data.city,
+//           data.loanAmount,
+//           data.salary,
+//           data.cibil || "",
+//           data.gclid || "",
+//           // new Date().toISOString().replace("T", " ").replace("Z", ""),
+//           new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+//         ],
+//       ],
+//     },
+//   });
+// }
+
 async function saveToGoogleSheet(data: {
   name: string;
   phone: string;
@@ -14,54 +74,45 @@ async function saveToGoogleSheet(data: {
   salary: string;
   gclid?: string;
 }) {
-  const auth = new google.auth.JWT({
-    email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-    key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"), 
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-  });
+  try {
+    const auth = new google.auth.JWT({
+      email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
 
-  const sheets = google.sheets({ version: "v4", auth });
-  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID!;
+    const sheets = google.sheets({ version: "v4", auth });
+    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID!;
 
-  
-const getResponse = await sheets.spreadsheets.values.get({
-  spreadsheetId,
-  range: "'Google Leads December'!D2:K50000",
-});
+    const sheetName = "March26"; // ✅ EXACT name from console
 
-const rows = getResponse.data.values || [];
-
-let lastRow = 1; 
-for (let i = rows.length - 1; i >= 0; i--) {
-  if (rows[i].some(cell => cell !== "")) {
-    lastRow = 2 + i; 
-    break;
-  }
-}
-
-const nextRow = lastRow + 1;
-const range = `'Google Leads December'!D${nextRow}:K${nextRow}`;
-
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range,
-    valueInputOption: "USER_ENTERED",
-    requestBody: {
-      values: [
-        [
-          data.name,
-          data.phone,
-          data.city,
-          data.loanAmount,
-          data.cibil || "",
-          data.salary,
-          data.gclid || "",
-          // new Date().toISOString().replace("T", " ").replace("Z", ""),
-          new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `${sheetName}!A:I`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: [
+          [
+            "", // UTM placeholder
+            data.name,
+            data.phone,
+            data.city,
+            data.loanAmount,
+            data.salary,
+            data.cibil || "",
+            data.gclid || "",
+            new Date().toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+            }),
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
+
+    console.log("✅ Data saved to Google Sheets");
+  } catch (error) {
+    console.error("❌ Google Sheets Error:", error);
+  }
 }
 
 // ✅ POST /api/users
@@ -114,8 +165,8 @@ export async function POST(req: Request) {
       error instanceof Error
         ? error.message
         : typeof error === "string"
-        ? error
-        : "Unknown error";
+          ? error
+          : "Unknown error";
 
     return NextResponse.json(
       { message: "Error saving user", error: errorMessage },
