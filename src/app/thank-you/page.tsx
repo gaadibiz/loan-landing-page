@@ -1,12 +1,10 @@
 "use client";
-
 import { CheckCircle } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function ThankYouPage() {
-  const searchParams = useSearchParams();
-  const applicationId = searchParams.get("applicationId") || "ABC123";
+
+
   const whatsappMessage = `Hi I have applied for a loan. I have a query. Please assist`;
   const whatsappUrl = `https://api.whatsapp.com/send/?phone=919311932361&text=${encodeURIComponent(
     whatsappMessage
