@@ -6,7 +6,7 @@ export default function ThankYouPage() {
 
 
   const whatsappMessage = `Hi I have applied for a loan. I have a query. Please assist`;
-  const whatsappUrl = `https://api.whatsapp.com/send/?phone=919311932361&text=${encodeURIComponent(
+  const whatsappUrl = `https://api.whatsapp.com/send/?phone=919217364584&text=${encodeURIComponent(
     whatsappMessage
   )}&type=phone_number&app_absent=0`;
 
