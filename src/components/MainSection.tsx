@@ -270,53 +270,89 @@ export default function MainSection() {
 
 
   return (
-    <section className="bg-[url('/bg.jpg')] bg-cover bg-center py-20">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center lg:justify-between px-4">
+    <section className="relative bg-[url('/bg.jpg')] bg-cover bg-center min-h-screen flex items-center">
+      {/* Dark gradient overlay for legibility */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/20" />
+
+      <div className="relative z-10 container mx-auto flex flex-col lg:flex-row items-start justify-between gap-12 px-6 py-20">
+
         {/* Left Content */}
-        <div className="max-w-xl pl-6 lg:pl-2 text-white mt-0 lg:mt-[-400px]">
-          <p className="text-red-500 font-semibold underline underline-offset-8">
+        <div className="flex-1 max-w-xl text-white">
+
+          {/* Live badge */}
+          <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/40 text-red-400 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             Instant Loan Approval
-          </p>
-          <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold lg:font-semibold leading-tight mt-2">
-            Get Emergency Loan in{" "}
-            <span className="text-red-400">30 Minutes</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-5">
+            Get Emergency Loan{" "}
+            <span className="text-red-500">in 30 Minutes</span>
           </h1>
-          <p className="mt-4 text-xl text-gray-100">
+
+          <p className="text-lg text-gray-300 leading-relaxed mb-8">
             Quick, secure, and hassle-free loans for all your urgent financial needs. Paperless, instant approval.
           </p>
-          <div className="mt-10 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+
+          {/* Mini stats */}
+          <div className="flex flex-wrap gap-3 mb-8">
+            {[
+              { value: "10,000+", label: "Happy Customers" },
+              { value: "₹50 Cr+", label: "Disbursed" },
+              { value: "99.8%", label: "Approval Rate" },
+            ].map(({ value, label }) => (
+              <div key={label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-center min-w-[100px]">
+                <p className="text-white font-bold text-lg leading-none">{value}</p>
+                <p className="text-gray-400 text-xs mt-1">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <button
               onClick={handleScrollToForm}
-              className="text-lg bg-red-600 px-8 py-3 rounded-full text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer"
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors text-base cursor-pointer"
             >
-              Apply Now
+              Apply Now →
             </button>
             <a
               href="tel:9266328731"
-              className="text-lg border border-white px-6 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-colors text-center flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 border border-white/40 text-white hover:bg-white/10 px-6 py-3.5 rounded-xl transition-colors text-base"
             >
-              <strong><Phone className="w-8 h-5 font-bold text-xl" /></strong>
-              Call:
-              <span>9266328731</span>
+              <Phone className="w-5 h-5" />
+              Call: 9266328731
             </a>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex flex-wrap gap-4">
+            {["No Hidden Charges", "Paperless Process", "RBI Compliant"].map((badge) => (
+              <span key={badge} className="flex items-center gap-1.5 text-sm text-gray-300">
+                <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                {badge}
+              </span>
+            ))}
           </div>
         </div>
 
         {/* Right Form */}
         <div
           id="loan-form"
-          className="bg-white text-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-md lg:max-w-[28rem] mt-12 lg:mt-0 lg:ml-24"
+          className="w-full max-w-[26rem] flex-shrink-0 mt-10 lg:mt-0"
         >
+          <div className="rounded-2xl shadow-2xl overflow-hidden">
+            {/* Form header strip */}
+            <div className="bg-red-600 px-6 py-4 text-center">
+              <h2 className="text-xl font-bold text-white">Get Instant Loan</h2>
+              <p className="text-red-200 text-xs mt-1 flex justify-center gap-4">
+                <span className="flex items-center gap-1"><CheckCircle2 size={13} /> Instant Approval</span>
+                <span className="flex items-center gap-1"><CheckCircle2 size={13} /> No Hidden Fees</span>
+              </p>
+            </div>
+
+            <div className="bg-white text-gray-800 px-6 py-5">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <h2 className="text-2xl font-bold text-center">Get Instant Loan</h2>
-            <p className="text-center text-gray-600 text-sm flex justify-center gap-3 mt-1">
-              <span className="flex items-center gap-1 text-green-600">
-                <CheckCircle2 size={16} /> Instant Approval
-              </span>
-              <span className="flex items-center gap-1 text-green-600">
-                <CheckCircle2 size={16} /> No Hidden Fees
-              </span>
-            </p>
 
             {/* Full Name */}
             <div>
@@ -671,8 +707,10 @@ export default function MainSection() {
               </div>
             </div>
           )}
-        </div>
-      </div>
+            </div>{/* /bg-white inner */}
+          </div>{/* /rounded-2xl shadow-2xl */}
+        </div>{/* /form column */}
+      </div>{/* /container */}
 
       {/* Toast Container */}
       <ToastContainer
