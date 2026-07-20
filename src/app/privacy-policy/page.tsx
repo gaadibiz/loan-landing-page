@@ -183,7 +183,7 @@ export default function PrivacyPolicy() {
         <p>If you have questions about this privacy policy or how we handle your personal information, please contact us:</p>
         <div className="bg-red-50 border border-red-50 rounded-lg p-4 my-4 space-y-2 mb-4">
           <p className="font-semibold">LoanInNeed - A Unit of Sashi Enterprises Ltd.</p>
-          <p><strong>Phone:</strong> 9266328731</p>
+          <p><strong>Phone:</strong> 8796633465</p>
           <p><strong>Email:</strong> customerservice@loaninneed.in</p>
           <p><strong>Privacy Officer:</strong> privacy@loaninneed.in</p>
           <p><strong>Grievance Email:</strong> grievance@loaninneed.in</p>

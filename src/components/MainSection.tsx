@@ -283,12 +283,12 @@ export default function MainSection() {
               Apply Now
             </button>
             <a
-              href="tel:9266328731"
+              href="tel:8796633465"
               className="text-lg border border-white px-6 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-colors text-center flex items-center justify-center gap-2"
             >
               <strong><Phone className="w-8 h-5 font-bold text-xl" /></strong>
               Call:
-              <span>9266328731</span>
+              <span>8796633465</span>
             </a>
           </div>
         </div>

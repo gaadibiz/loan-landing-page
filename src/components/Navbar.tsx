@@ -57,7 +57,7 @@ export default function Navbar() {
           
           {/* Contact → Call */}
           <a
-            href="tel:9266328731"
+            href="tel:8796633465"
             className="text-gray-700 hover:text-red-600 font-medium"
           >
             Contact
@@ -113,7 +113,7 @@ export default function Navbar() {
           
           {/* Contact → Call */}
           <a
-            href="tel:9266328731"
+            href="tel:8796633465"
             onClick={() => setMenuOpen(false)}
             className="block text-gray-700 hover:text-red-600 font-medium"
           >

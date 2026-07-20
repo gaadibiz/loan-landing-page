@@ -102,7 +102,7 @@ export default function TermsAndConditions() {
           We have established an effective Grievance Redressal Cell as per RBI directives. Any complaints will be addressed within 5 working days. You can reach us at:
         </p>
         <div className="bg-gray-50 border border-gray-50 rounded-lg p-4 my-4 space-y-2 mb-4">
-          <p><strong>Phone:</strong> 9266328731</p>
+          <p><strong>Phone:</strong> 8796633465</p>
           <p><strong>Email:</strong> customerservice@loaninneed.in</p>
         </div>
 
@@ -123,7 +123,7 @@ export default function TermsAndConditions() {
 </h2>
         <div className="bg-red-50 border border-red-50 rounded-lg p-4 my-4 space-y-2 mb-4">
           <p className="font-semibold">LoanInNeed - A Unit of Sashi Enterprises Ltd.</p>
-          <p><strong>Phone:</strong> 9266328731</p>
+          <p><strong>Phone:</strong> 8796633465</p>
           <p><strong>Email:</strong> customerservice@loaninneed.in</p>
           <p><strong>Privacy Officer:</strong> privacy@loaninneed.in</p>
           <p><strong>Grievance Email:</strong> grievance@loaninneed.in</p>
