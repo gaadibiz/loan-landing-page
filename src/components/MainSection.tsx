@@ -73,7 +73,6 @@ export default function MainSection() {
   const [agree, setAgree] = useState(false);
   const [checkbox1, setCheckbox1] = useState(true);
   const [checkbox2, setCheckbox2] = useState(true);
-  const [otherCity, setOtherCity] = useState("");
 
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -99,11 +98,6 @@ export default function MainSection() {
       return;
     }
 
-    if (formData.city === "Other" && !otherCity.trim()) {
-      toast.error("❌ Please enter your city name.");
-      return;
-    }
-
     // if (Number(formData.salary) < 35000) {
     //   toast.error("❌ Minimum salary should be ₹35,000.");
     //   return;
@@ -121,16 +115,14 @@ export default function MainSection() {
     setLoading(true);
 
     try {
-      const effectiveCity = formData.city === "Other" ? otherCity.trim() : formData.city;
-
       // First API call - existing functionality
-      const res = await axios.post("/api/users", { ...formData, city: effectiveCity, phone: `+91${formData.phone}` });
+      const res = await axios.post("/api/users", { ...formData, phone: `+91${formData.phone}` });
 
       // Second API call - Kylas Lead API
       try {
         // Get mapped values from the JSON file
-        const cityMappedId = effectiveCity
-          ? kylasMapping.cityMapping[effectiveCity as keyof typeof kylasMapping.cityMapping] || null
+        const cityMappedId = formData.city
+          ? kylasMapping.cityMapping[formData.city as keyof typeof kylasMapping.cityMapping] || null
           : null;
         const loanAmountMappedId = formData.loanAmount
           ? kylasMapping.loanAmountMapping[formData.loanAmount as keyof typeof kylasMapping.loanAmountMapping] || null
@@ -157,7 +149,7 @@ export default function MainSection() {
           salutation: null,
           emails: [],
           timezone: "Asia/Kolkata",
-          city: effectiveCity || "",
+          city: formData.city || "",
           state: "",
           zipcode: "",
           country: "IN",
@@ -232,7 +224,6 @@ export default function MainSection() {
           utmContent: "",
           utmTerm: ""
         });
-        setOtherCity("");
         setTimeout(() => {
           router.push("/thank-you");
         }, 2000);
@@ -271,7 +262,7 @@ export default function MainSection() {
 
   return (
     <section className="bg-[url('/bg.jpg')] bg-cover bg-center py-20">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center lg:justify-between px-4">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center lg:justify-start gap-x-10 px-6">
         {/* Left Content */}
         <div className="max-w-xl pl-6 lg:pl-2 text-white mt-0 lg:mt-[-400px]">
           <p className="text-red-500 font-semibold underline underline-offset-8">
@@ -401,24 +392,8 @@ export default function MainSection() {
                   <option value="Jaipur">Jaipur</option>
                   <option value="Surat">Surat</option>
                   <option value="Bhopal">Bhopal</option>
-                  <option value="Other">Other</option>
                 </select>
               </div>
-              {formData.city === "Other" && (
-                <div className="relative mt-2">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-                  <input
-                    type="text"
-                    placeholder="Enter your city name"
-                    className="w-full border border-gray-400 rounded-lg p-3 pl-10 outline-none
-             focus:border-2 focus:border-black focus:ring-1 focus:ring-red-400 focus:ring-offset-0"
-                    value={otherCity}
-                    onChange={(e) => setOtherCity(e.target.value)}
-                    required
-                    maxLength={50}
-                  />
-                </div>
-              )}
             </div>
 
 
