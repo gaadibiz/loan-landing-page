@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import User from "@/models/User";
 import { google } from "googleapis";
 import { connectDB } from "@/lib/db";
+import { sendLeadToBumchum } from "@/lib/bumchum";
 
 // Save data to Google Sheets
 // async function saveToGoogleSheet(data: {
@@ -121,9 +122,25 @@ export async function POST(req: Request) {
     await connectDB();
     const body = await req.json();
 
-    const { name, phone, city, loanAmount, cibil, salary, gclid } = body;
+    const {
+      name,
+      phone,
+      city,
+      loanAmount,
+      cibil,
+      salary,
+      gclid,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmContent,
+      utmTerm,
+    } = body;
+
+    console.log("[/api/users] Received submission:", JSON.stringify(body));
 
     if (!name || !phone || !city || !loanAmount || !salary) {
+      console.warn("[/api/users] Rejected: missing required fields");
       return NextResponse.json(
         { message: "Name, Phone, City, Loan Amount, and Salary are required" },
         { status: 400 }
@@ -142,16 +159,45 @@ export async function POST(req: Request) {
     });
 
     const savedUser = await newUser.save();
+    console.log("[/api/users] Saved to MongoDB, id:", savedUser._id);
 
-    // Save to Google Sheets (non-blocking)
-    await saveToGoogleSheet({
-      name: body.name,
-      phone: body.phone,
-      city: body.city,
-      loanAmount: body.loanAmount,
-      cibil: body.cibil,
-      salary: body.salary,
-      gclid: body.gclid,
+    // Push to Google Sheets and BumChum in parallel — both swallow their own
+    // errors so a downstream outage never fails the user's submission.
+    const results = await Promise.allSettled([
+      saveToGoogleSheet({
+        name,
+        phone,
+        city,
+        loanAmount,
+        cibil,
+        salary,
+        gclid,
+      }),
+      sendLeadToBumchum({
+        name,
+        phone,
+        city,
+        loanAmount,
+        salary,
+        cibil,
+        gclid,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        utmContent,
+        utmTerm,
+      }),
+    ]);
+
+    // Both helpers catch their own errors, so a "rejected" here means the helper
+    // itself threw unexpectedly — worth surfacing separately.
+    results.forEach((r, i) => {
+      const label = ["Google Sheets", "BumChum"][i];
+      if (r.status === "rejected") {
+        console.error(`[/api/users] ${label} handler threw:`, r.reason);
+      } else {
+        console.log(`[/api/users] ${label} handler finished`);
+      }
     });
 
     return NextResponse.json(
