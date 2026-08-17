@@ -49,7 +49,6 @@ export async function sendLeadToBumchum(data: BumchumLead) {
     "https://talkapiprod.bumchumfinserve.com/api/v1/leads/webhook/create-external-leads";
   const authKey = process.env.BUMCHUM_AUTH_KEY;
 
-
   if (!authKey) {
     console.warn(
       "⚠ [BumChum] Aborted: BUMCHUM_AUTH_KEY is not set in the environment.",
@@ -58,12 +57,14 @@ export async function sendLeadToBumchum(data: BumchumLead) {
   }
 
   const { countryCode, phone } = splitPhone(data.phone, data.countryCode);
-  console.log(`[BumChum] Phone split: "${data.phone}" → code "${countryCode}" + number "${phone}"`);
+  console.log(
+    `[BumChum] Phone split: "${data.phone}" → code "${countryCode}" + number "${phone}"`,
+  );
 
   // Payload field names live here — adjust in one place if BumChum expects different keys.
   const payload = {
     name: data.name,
-    countryCode,
+    countryCode: "+91",
     phone,
     city: data.city,
     loanAmount: data.loanAmount,
@@ -71,6 +72,10 @@ export async function sendLeadToBumchum(data: BumchumLead) {
     cibilScore: data.cibil || "",
     subSource: process.env.NEXT_PUBLIC_SOURCE_URL || "loaninneed.in",
     source: "GOOGLE_CAMPAIGN_FORM",
+    formName: "LOAN_IN_NEED_CAMPAIGN",
+    priority: "HIGH",
+    categoryName: "LOAN_INQUIRY",
+    categoryCode: "LIQ",
     gclid: data.gclid || "",
     utmSource: data.utmSource || "",
     utmMedium: data.utmMedium || "",
@@ -115,8 +120,6 @@ export async function sendLeadToBumchum(data: BumchumLead) {
 
       return;
     }
-
-
   } catch (error) {
     const elapsed = Date.now() - startedAt;
     if (error instanceof Error && error.name === "AbortError") {
