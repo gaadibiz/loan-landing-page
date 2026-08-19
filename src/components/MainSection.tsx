@@ -114,9 +114,43 @@ export default function MainSection() {
 
     setLoading(true);
 
+    let applicationRedirectUrl = "";
+
     try {
       // First API call - existing functionality
       const res = await axios.post("/api/users", { ...formData, phone: `+91${formData.phone}` });
+
+      // Register phone without verification
+      try {
+        const minMonthlySalary = formData.salary
+          ?.replace(/₹/g, "")
+          .split(/[-+]/)[0]
+          .trim()
+          .replace(/,/g, "") || "";
+
+        const phoneRegisterRes = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/register/register-phone-without-verification`,
+          {
+            phone: `+91${formData.phone}`,
+            loanAmount: formData.loanAmount?.replace(/[₹,]/g, "") || "",
+            monthlySalaryRange: minMonthlySalary,
+            salaryReceivedIn: "",
+            cibilScore: formData.cibil || "",
+            purposeOfLoan: "",
+            occupation: "",
+            city: formData.city || "",
+            income: "",
+            expense: "",
+            tenure: ""
+          }
+        );
+        console.log("✅ Phone registered successfully");
+
+        applicationRedirectUrl = phoneRegisterRes.data?.redirectUrl || "";
+      } catch (phoneRegisterError) {
+        // Log error but don't block the main flow
+        console.error("⚠ Failed to register phone:", phoneRegisterError);
+      }
 
       // Second API call - Kylas Lead API
       try {
@@ -225,7 +259,11 @@ export default function MainSection() {
           utmTerm: ""
         });
         setTimeout(() => {
-          router.push("/thank-you");
+          router.push(
+            applicationRedirectUrl
+              ? `/thank-you?redirectUrl=${encodeURIComponent(applicationRedirectUrl)}`
+              : "/thank-you"
+          );
         }, 2000);
       } else {
         toast.error("❌ Failed to submit loan request.");

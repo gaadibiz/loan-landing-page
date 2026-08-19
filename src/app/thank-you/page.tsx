@@ -1,9 +1,12 @@
 "use client";
 import { CheckCircle } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { useSearchParams } from "next/navigation";
 
 export default function ThankYouPage() {
 
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl");
 
   const whatsappMessage = `Hi I have applied for a loan. I have a query. Please assist`;
   const whatsappUrl = `https://api.whatsapp.com/send/?phone=918796633465&text=${encodeURIComponent(
@@ -44,6 +47,17 @@ export default function ThankYouPage() {
               </span>
             </span>
           </a>
+
+          {redirectUrl && (
+            <a
+              href={redirectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-auto inline-flex items-center justify-center gap-3 bg-red-600 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:bg-red-700 transition-all duration-200"
+            >
+              Complete Your Application
+            </a>
+          )}
 
           <a
             href="https://readdy.link/preview/e923117a-e2ad-4d0d-8ec0-b704bf0e3687/1945895"
