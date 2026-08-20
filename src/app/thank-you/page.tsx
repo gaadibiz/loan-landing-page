@@ -1,10 +1,10 @@
 "use client";
+import { Suspense } from "react";
 import { CheckCircle } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 
-export default function ThankYouPage() {
-
+function ThankYouContent() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirectUrl");
 
@@ -28,7 +28,7 @@ export default function ThankYouPage() {
 
         {/* Message */}
         <p className="text-gray-600 text-base md:text-lg mb-6 leading-relaxed">
-        Your loan application has been successfully received. To expedite the process, please upload your documents via WhatsApp using the link below.
+          Your loan application has been successfully received. To expedite the process, please upload your documents via WhatsApp using the link below.
         </p>
 
         {/* Buttons */}
@@ -82,10 +82,25 @@ export default function ThankYouPage() {
           }
           to {
             opacity: 1;
-            transform: translateY(0);
           }
         }
       `}</style>
     </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-50 via-white to-red-100 px-4">
+          <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+            <p className="text-gray-600 text-base">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <ThankYouContent />
+    </Suspense>
   );
 }
