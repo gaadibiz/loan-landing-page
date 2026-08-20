@@ -141,7 +141,13 @@ export default function MainSection() {
             city: formData.city || "",
             income: "",
             expense: "",
-            tenure: ""
+            tenure: "",
+            gclid: formData.gclid || "",
+            utm_source: formData.utmSource || "",
+            utm_medium: formData.utmMedium || "",
+            utm_campaign: formData.utmCampaign || "",
+            utm_content: formData.utmContent || "",
+            utm_term: formData.utmTerm || ""
           }
         );
         console.log("✅ Phone registered successfully");
