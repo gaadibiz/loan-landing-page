@@ -427,6 +427,7 @@ export default function MainSection() {
                   <option value="">Select your city</option>
                   <option value="Ahmedabad">Ahmedabad</option>
                   <option value="Bangalore">Bangalore</option>
+                  <option value="Chandigarh">Chandigarh</option>
                   <option value="Chennai">Chennai</option>
                   <option value="Delhi/NCR">Delhi</option>
                   <option value="Hyderabad">Hyderabad</option>
@@ -479,7 +480,7 @@ export default function MainSection() {
                 <label className="text-sm font-medium">
                   Monthly Salary (₹) <span className="text-red-500">*</span>
                 </label>
-                <span className="text-xs text-red-500 italic font-medium">Minimum Salary Rs.35,000/-</span>
+                <span className="text-xs text-red-500 italic font-medium">Minimum Salary Rs.20,000/-</span>
               </div>
 
               {/* Minimum Salary Note */}
@@ -502,6 +503,7 @@ export default function MainSection() {
                   data-form-type="salary"
                 >
                   <option value="">Select salary range</option>
+                  <option value="₹20,000 - ₹35,000">₹20,000 - ₹35,000</option>
                   <option value="₹35,000 - ₹50,000">₹35,000 - ₹50,000</option>
                   <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
                   <option value="₹1,00,000+">₹1,00,000 and above</option>
