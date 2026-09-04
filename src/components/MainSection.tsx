@@ -437,6 +437,11 @@ export default function MainSection() {
                   <option value="Jaipur">Jaipur</option>
                   <option value="Surat">Surat</option>
                   <option value="Bhopal">Bhopal</option>
+                  <option value="Lucknow">Lucknow</option>
+                  <option value="Patna">Patna</option>
+                  <option value="Bhubaneswar">Bhubaneswar</option>
+                  <option value="Nagpur">Nagpur</option>
+                  <option value="Indore">Indore</option>
                 </select>
               </div>
             </div>
