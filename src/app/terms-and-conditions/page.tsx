@@ -1,3 +1,20 @@
+import type { Metadata } from "next";
+import { OG_IMAGE } from "@/constant/site";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions — LoanInNeed",
+  description:
+    "The terms governing your use of LoanInNeed and any loan application you submit through this site.",
+  alternates: { canonical: "/terms-and-conditions" },
+  openGraph: {
+    title: "Terms & Conditions — LoanInNeed",
+    description:
+      "The terms governing your use of LoanInNeed and any loan application submitted here.",
+    url: "/terms-and-conditions",
+    images: [{ ...OG_IMAGE, alt: "LoanInNeed — terms and conditions" }],
+  },
+};
+
 import Link from "next/link";
 
 export default function TermsAndConditions() {

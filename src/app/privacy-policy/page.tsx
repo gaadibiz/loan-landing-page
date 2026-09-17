@@ -1,3 +1,20 @@
+import type { Metadata } from "next";
+import { OG_IMAGE } from "@/constant/site";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy — LoanInNeed",
+  description:
+    "How LoanInNeed collects, uses and protects the personal and financial information you share when applying for a loan.",
+  alternates: { canonical: "/privacy-policy" },
+  openGraph: {
+    title: "Privacy Policy — LoanInNeed",
+    description:
+      "How LoanInNeed collects, uses and protects your personal and financial information.",
+    url: "/privacy-policy",
+    images: [{ ...OG_IMAGE, alt: "LoanInNeed — privacy policy" }],
+  },
+};
+
 import Link from "next/link";
 
 export default function PrivacyPolicy() {
