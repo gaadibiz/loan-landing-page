@@ -443,6 +443,7 @@ export default function MainSection() {
                   <option value="Nagpur">Nagpur</option>
                   <option value="Indore">Indore</option>
                   <option value="Guwahati">Guwahati</option>
+                  <option value="Coimbatore">Coimbatore</option>
                 </select>
               </div>
             </div>
